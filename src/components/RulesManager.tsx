@@ -279,12 +279,44 @@ export const RulesManager: React.FC<RulesManagerProps> = ({
         </div>
       )}
 
-      {/* Helper callout */}
-      <div className="bg-slate-950 border border-slate-800 rounded-xl p-4 flex items-start gap-3 text-xs text-slate-400">
-        <HelpCircle className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
-        <p>
-          <strong>Multiple Rules Priority:</strong> If a customer qualifies for multiple rules (e.g. 10% UPI offer and Flat ₹50 offer), the rule with the highest priority or highest savings will be selected by the Shopify Discount Allocator function.
+      {/* Helper callout & Checkout Activation Guide */}
+      <div className="bg-emerald-950/40 border border-emerald-800/80 rounded-xl p-5 space-y-3 text-xs">
+        <div className="flex items-center gap-2 text-emerald-400 font-bold text-sm">
+          <span>⚡ Shopify Checkout Page par Discount Kaise Dikhega (Sabse Zaroori Step):</span>
+        </div>
+        <p className="text-slate-300 leading-relaxed">
+          Shopify ka checkout private hota hai. Dashboard me rule ON karne ke baad, discount ko checkout par minus karne ke 2 standard tarike hain:
         </p>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1">
+          <div className="bg-slate-950 p-3.5 rounded-lg border border-slate-800 space-y-1.5">
+            <div className="font-bold text-white flex items-center gap-1.5">
+              <span className="w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[10px]">A</span>
+              Shopify Admin me &quot;Automatic Discount&quot; (Instant 1-Minute Fix)
+            </div>
+            <ol className="list-decimal list-inside text-slate-400 space-y-1 text-[11px]">
+              <li>Shopify Admin ke left menu me <strong>Discounts</strong> par click karein.</li>
+              <li><strong>Create discount</strong> &rarr; <strong>Amount off order</strong> select karein.</li>
+              <li>Upar <strong>&quot;Automatic discount&quot;</strong> select karein (taaki customer ko code na dalna pade).</li>
+              <li>Title: <code className="text-emerald-400">⚡ Instant 10% UPI &amp; Online Pay</code></li>
+              <li>Percentage: <code className="text-emerald-400">10%</code>, Minimum amount: <code className="text-emerald-400">₹499</code>.</li>
+              <li><strong>Save discount</strong> dabayein &rarr; Checkout par turant discount minus ho jayega!</li>
+            </ol>
+          </div>
+
+          <div className="bg-slate-950 p-3.5 rounded-lg border border-slate-800 space-y-1.5">
+            <div className="font-bold text-white flex items-center gap-1.5">
+              <span className="w-5 h-5 rounded-full bg-blue-600 text-white flex items-center justify-center text-[10px]">B</span>
+              Shopify Checkout Editor me Banner Lagana
+            </div>
+            <ol className="list-decimal list-inside text-slate-400 space-y-1 text-[11px]">
+              <li>Shopify Admin me <strong>Settings ⚙️ &rarr; Checkout</strong> par jayein.</li>
+              <li>&quot;Checkout customization&quot; ke andar <strong>Customize</strong> par click karein.</li>
+              <li>Payment section ke paas <strong>Add app block</strong> &rarr; PayBro Banner choose karein.</li>
+              <li>Upar <strong>Save</strong> kar dein!</li>
+            </ol>
+          </div>
+        </div>
       </div>
 
     </div>

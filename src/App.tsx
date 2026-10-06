@@ -13,6 +13,7 @@ import { ShopifyIntegrationHub } from './components/ShopifyIntegrationHub';
 import { BannerCustomizer } from './components/BannerCustomizer';
 import { DeveloperCodeExport } from './components/DeveloperCodeExport';
 import { ShopifyAdminEmbeddedView } from './components/ShopifyAdminEmbeddedView';
+import { AutoPilotSync } from './components/AutoPilotSync';
 import { HindiGuideModal } from './components/HindiGuideModal';
 import { 
   INITIAL_RULES, 
@@ -157,6 +158,13 @@ export default function App() {
       {/* Main Content Area */}
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
         
+        {activeTab === 'autopilot' && (
+          <AutoPilotSync
+            storeConfig={storeConfig}
+            rules={rules}
+          />
+        )}
+
         {activeTab === 'overview' && (
           <DashboardOverview
             rules={rules}
@@ -167,6 +175,7 @@ export default function App() {
             onNavigateToSimulator={() => setActiveTab('simulator')}
             onNavigateToIntegration={() => setActiveTab('integration')}
             onNavigateToRules={() => setActiveTab('rules')}
+            onNavigateToAutoPilot={() => setActiveTab('autopilot')}
             isAppEnabled={isAppEnabled}
             onToggleAppEnabled={handleToggleAppEnabled}
           />

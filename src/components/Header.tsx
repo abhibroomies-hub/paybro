@@ -9,7 +9,8 @@ import {
   Smartphone,
   Layers,
   Code2,
-  Palette
+  Palette,
+  Zap
 } from 'lucide-react';
 import { ShopifyStoreConfig } from '../types';
 
@@ -53,6 +54,18 @@ export const Header: React.FC<HeaderProps> = ({
 
         {/* Zone 2: Navigation Links */}
         <nav className="hidden lg:flex items-center gap-1 text-xs font-medium text-slate-300">
+          <button
+            onClick={() => setActiveTab('autopilot')}
+            className={`px-3 py-1.5 rounded-md transition-colors flex items-center gap-1.5 ${
+              activeTab === 'autopilot'
+                ? 'bg-emerald-600 text-white font-semibold shadow-xs'
+                : 'text-emerald-400 bg-emerald-950/60 border border-emerald-800/80 hover:bg-emerald-900/60 font-semibold'
+            }`}
+          >
+            <Zap className="w-3.5 h-3.5 text-amber-300" />
+            <span>⚡ 1-Click Auto-Pilot</span>
+          </button>
+
           <button
             onClick={() => setActiveTab('overview')}
             className={`px-3 py-1.5 rounded-md transition-colors ${
@@ -170,6 +183,16 @@ export const Header: React.FC<HeaderProps> = ({
 
       {/* Mobile nav row */}
       <div className="lg:hidden flex items-center overflow-x-auto px-4 py-2 bg-slate-900 border-t border-slate-800 gap-1 text-xs">
+        <button
+          onClick={() => setActiveTab('autopilot')}
+          className={`px-2.5 py-1 rounded whitespace-nowrap font-bold ${
+            activeTab === 'autopilot'
+              ? 'bg-emerald-600 text-white'
+              : 'text-emerald-400 bg-emerald-950 border border-emerald-800'
+          }`}
+        >
+          ⚡ Auto-Pilot
+        </button>
         <button
           onClick={() => setActiveTab('overview')}
           className={`px-2.5 py-1 rounded whitespace-nowrap ${

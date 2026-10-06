@@ -28,6 +28,7 @@ interface DashboardOverviewProps {
   onNavigateToSimulator: () => void;
   onNavigateToIntegration: () => void;
   onNavigateToRules: () => void;
+  onNavigateToAutoPilot?: () => void;
   isAppEnabled: boolean;
   onToggleAppEnabled: () => void;
 }
@@ -41,6 +42,7 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
   onNavigateToSimulator,
   onNavigateToIntegration,
   onNavigateToRules,
+  onNavigateToAutoPilot,
   isAppEnabled,
   onToggleAppEnabled,
 }) => {
@@ -103,6 +105,16 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
               {isAppEnabled ? 'ON' : 'OFF'}
             </span>
           </div>
+
+          {onNavigateToAutoPilot && (
+            <button
+              onClick={onNavigateToAutoPilot}
+              className="flex-1 md:flex-initial flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold bg-emerald-600 hover:bg-emerald-500 text-white shadow-sm transition-colors whitespace-nowrap"
+            >
+              <Zap className="w-3.5 h-3.5 text-amber-300" />
+              <span>⚡ 1-Click Auto-Pilot</span>
+            </button>
+          )}
 
           <button
             onClick={onNavigateToSimulator}
