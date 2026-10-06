@@ -287,6 +287,11 @@ export default router;
       code: serverAuthCode,
       language: 'typescript',
     },
+    'package-json': {
+      label: 'package.json (Clean Dependencies, No ERESOLVE)',
+      code: `{\n  "name": "prepaid-perks-shopify-app",\n  "private": true,\n  "version": "1.0.0",\n  "type": "module",\n  "scripts": {\n    "dev": "vite",\n    "build": "vite build",\n    "preview": "vite preview"\n  },\n  "dependencies": {\n    "@tailwindcss/vite": "^4.3.3",\n    "@vitejs/plugin-react": "^6.1.1",\n    "lucide-react": "^0.546.0",\n    "react": "^19.0.1",\n    "react-dom": "^19.0.1",\n    "vite": "^8.3.0",\n    "express": "^4.21.2",\n    "dotenv": "^17.2.3",\n    "motion": "^12.23.24"\n  },\n  "devDependencies": {\n    "@types/node": "^22.14.0",\n    "@types/react": "^19.3.0",\n    "@types/react-dom": "^19.3.0",\n    "autoprefixer": "^10.4.21",\n    "tailwindcss": "^4.3.3",\n    "tsx": "^4.21.0",\n    "typescript": "^7.0.2",\n    "@types/express": "^4.17.21"\n  }\n}`,
+      language: 'json',
+    },
   };
 
   const currentFile = filesMap[activeFile] || filesMap['shopify-toml'];
@@ -304,6 +309,7 @@ export default router;
         'extensions/checkout-ui/src/Checkout.jsx': checkoutExtensionJsx,
         'snippets/prepaid-offer-banner.liquid': liquidSnippet,
         'server/api/auth.ts': serverAuthCode,
+        'package.json': filesMap['package-json'].code,
       },
     };
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
