@@ -1,2 +1,4 @@
-name = "PayBro Theme Embed"
 type = "theme"
+name = "PayBro Prepaid Offer"
+handle = "prepaid-offer"
+
