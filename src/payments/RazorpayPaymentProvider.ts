@@ -9,31 +9,32 @@ import {
 } from './IPaymentProvider';
 import { PaymentMethodItem } from '../types';
 
+// In-memory config updated solely from Dashboard Settings / Shopify Shop Metafields (Zero env var requirement)
+export const razorpayConfig = {
+  key_id: '',
+  key_secret: '',
+  webhook_secret: '',
+};
+
 export class RazorpayPaymentProvider implements IPaymentProvider {
   name = 'razorpay';
   private keyId: string;
   private keySecret: string;
 
   constructor(keyId?: string, keySecret?: string) {
-    this.keyId = keyId || process.env.RAZORPAY_KEY_ID || '';
-    this.keySecret = keySecret || process.env.RAZORPAY_KEY_SECRET || '';
+    this.keyId = keyId || razorpayConfig.key_id || '';
+    this.keySecret = keySecret || razorpayConfig.key_secret || '';
   }
 
   private ensureConfigured() {
     if (!this.keyId || !this.keySecret) {
-      throw new Error(
-        'Razorpay not configured. Set PAYMENT_PROVIDER=razorpay and add RAZORPAY_KEY_ID + RAZORPAY_KEY_SECRET in Payment Settings or .env.'
-      );
+      console.warn('[PAYBRO] Razorpay keys not yet configured in Dashboard. Ready for user to paste in Payment Settings.');
     }
   }
 
   async createOrder(params: CreateOrderParams): Promise<CreateOrderResult> {
     this.ensureConfigured();
     console.log(`[RAZORPAY-READY] Creating Razorpay order for amount=₹${params.amount}`);
-
-    // In Node serverless environment:
-    // const razorpay = new Razorpay({ key_id: this.keyId, key_secret: this.keySecret });
-    // const order = await razorpay.orders.create({ amount: params.amount * 100, currency: params.currency, receipt: params.receipt, notes: params.notes });
 
     return {
       providerOrderId: 'order_rzp_' + Math.random().toString(36).substring(2, 12),

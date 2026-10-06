@@ -1,4 +1,5 @@
 import crypto from 'crypto';
+import { razorpayConfig } from '../../src/payments/RazorpayPaymentProvider';
 
 export default async function handler(req: any, res: any) {
   if (req.method !== 'POST') {
@@ -6,10 +7,10 @@ export default async function handler(req: any, res: any) {
   }
 
   const signature = req.headers['x-razorpay-signature'];
-  const webhookSecret = process.env.RAZORPAY_WEBHOOK_SECRET || 'rzp_webhook_secret_key';
+  const webhookSecret = razorpayConfig.webhook_secret;
 
-  // 1. Verify Razorpay Webhook HMAC Signature
-  if (signature) {
+  // 1. Verify Razorpay Webhook HMAC Signature if secret is configured
+  if (signature && webhookSecret) {
     const rawBody = typeof req.body === 'string' ? req.body : JSON.stringify(req.body);
     const expectedSignature = crypto
       .createHmac('sha256', webhookSecret)

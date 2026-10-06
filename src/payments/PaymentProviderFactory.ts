@@ -1,6 +1,6 @@
 import { IPaymentProvider } from './IPaymentProvider';
 import { MockPaymentProvider } from './MockPaymentProvider';
-import { RazorpayPaymentProvider } from './RazorpayPaymentProvider';
+import { RazorpayPaymentProvider, razorpayConfig } from './RazorpayPaymentProvider';
 import { PaymentProviderType } from '../types';
 
 export class PaymentProviderFactory {
@@ -13,7 +13,7 @@ export class PaymentProviderFactory {
   ): IPaymentProvider {
     const selected = providerType || (process.env.PAYMENT_PROVIDER as PaymentProviderType) || 'mock';
 
-    if (selected === 'razorpay') {
+    if (selected === 'razorpay' && (keys?.keyId || razorpayConfig.key_id)) {
       if (!this.razorpayInstance || keys?.keyId) {
         this.razorpayInstance = new RazorpayPaymentProvider(keys?.keyId, keys?.keySecret);
       }

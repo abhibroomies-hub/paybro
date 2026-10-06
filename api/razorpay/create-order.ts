@@ -1,12 +1,14 @@
+import { razorpayConfig } from '../../src/payments/RazorpayPaymentProvider';
+
 export default async function handler(req: any, res: any) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { amount, receipt = 'rcpt_' + Date.now(), currency = 'INR', notes = {} } = req.body || {};
+  const { amount, receipt = 'rcpt_' + Date.now(), currency = 'INR', notes = {}, keyId: customKeyId, keySecret: customKeySecret } = req.body || {};
 
-  const keyId = process.env.RAZORPAY_KEY_ID || 'rzp_test_1DP5mmOlF5G5ag';
-  const keySecret = process.env.RAZORPAY_KEY_SECRET || 'rzp_secret_dummy';
+  const keyId = customKeyId || razorpayConfig.key_id;
+  const keySecret = customKeySecret || razorpayConfig.key_secret;
 
   // Amount in Paise (e.g. ₹1350 = 135000 paise)
   const amountInPaise = Math.round((amount || 1350) * 100);
