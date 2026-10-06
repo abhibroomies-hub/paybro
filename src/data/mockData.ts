@@ -79,7 +79,7 @@ export const INITIAL_STORE_CONFIG: ShopifyStoreConfig = {
     'write_theme_code',
     'read_products',
   ],
-  appUrl: 'https://prepaid-perks-app.vercel.app',
+  appUrl: 'https://paybro-eta.vercel.app',
   isConnected: true,
   installedAt: '2026-10-02 11:20 AM',
   themeExtEnabled: true,
