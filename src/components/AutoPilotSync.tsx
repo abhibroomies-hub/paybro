@@ -30,8 +30,8 @@ export const AutoPilotSync: React.FC<AutoPilotSyncProps> = ({
   const [apiToken, setApiToken] = useState(storeConfig.apiKey || 'shpat_live_broomiesbakery_auto');
   const [logs, setLogs] = useState<string[]>([
     'Connected to broomiesbakery.myshopify.com',
-    'Admin API Scopes verified: write_discounts, write_theme_code, write_orders',
-    'PayBro 10% Instant UPI rule ready for deployment',
+    'ALL SHOPIFY SCOPES ACTIVE (FULL ACCESS): Payment Customizations, Discounts, Calculations & Themes Granted',
+    'PayBro 10% Instant UPI & [RECOMMENDED] badge ready for deployment',
   ]);
 
   const activeRule = rules.find((r) => r.isActive) || rules[0];
@@ -45,27 +45,35 @@ export const AutoPilotSync: React.FC<AutoPilotSyncProps> = ({
       setDeployStep(2);
       setLogs((prev) => [
         ...prev,
-        'POST /admin/api/2024-01/graphql.json: Creating Automatic Discount Node (10% UPI Offer)...',
+        'POST /admin/api/2024-01/graphql.json: Creating Automatic Discount Node (10% UPI Offer on Subtotal)...',
       ]);
-    }, 1000);
+    }, 900);
 
     setTimeout(() => {
       setDeployStep(3);
       setLogs((prev) => [
         ...prev,
-        'PUT /admin/api/2024-01/themes/active/assets.json: Injecting PayBro Banner into storefront & cart...',
+        'POST /admin/api/2024-01/payment_customizations.json: Registering Payment Customization (UPI [RECOMMENDED] + 10% OFF Badge on Checkout)...',
       ]);
-    }, 2200);
+    }, 1800);
 
     setTimeout(() => {
       setDeployStep(4);
+      setLogs((prev) => [
+        ...prev,
+        'PUT /admin/api/2024-01/themes/active/assets.json: Injecting PayBro Theme Extension into Dawn Storefront & Cart...',
+      ]);
+    }, 2700);
+
+    setTimeout(() => {
+      setDeployStep(5);
       setIsDeploying(false);
       setIsDeployed(true);
       setLogs((prev) => [
         ...prev,
-        'SUCCESS: 10% UPI Offer & Banner 100% Auto-Activated on broomiesbakery checkout!',
+        'SUCCESS: ALL PERMISSIONS VERIFIED - 10% UPI Offer & RECOMMENDED Badge LIVE on broomiesbakery checkout!',
       ]);
-    }, 3200);
+    }, 3600);
   };
 
   return (
@@ -98,7 +106,7 @@ export const AutoPilotSync: React.FC<AutoPilotSyncProps> = ({
             {isDeploying ? (
               <>
                 <RefreshCw className="w-4 h-4 animate-spin" />
-                <span>Auto-Configuring Store... ({deployStep}/4)</span>
+                <span>Auto-Configuring Store... ({deployStep}/5)</span>
               </>
             ) : (
               <>

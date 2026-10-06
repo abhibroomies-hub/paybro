@@ -230,15 +230,29 @@ Customer pays ₹899 → Zero RTO Risk → 100% Prepaid Conversion!`}
                     <span className="w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[11px]">3</span>
                     API Credentials &amp; Scopes Setup
                   </div>
-                  <span className="text-[11px] text-amber-400 font-mono">Client ID &amp; Secret</span>
+                  <span className="text-[11px] text-emerald-400 font-mono">Checkout &amp; Calculation Scopes</span>
                 </div>
                 <p className="text-xs text-slate-300">
-                  Shopify Partner me <strong>App setup</strong> tab me jake <strong>Client ID</strong> aur <strong>Client Secret</strong> copy karein aur Vercel Environment Variables me add karein:
+                  Shopify Partner me <strong>App setup</strong> / <strong>Configuration</strong> &gt; <strong>Access scopes</strong> me yeh <strong>FINAL COMPLETE SCOPES</strong> paste karein taki Checkout page, Automatic Discounts aur Calculation bina kisi error ke chale:
                 </p>
-                <div className="bg-slate-900 p-2.5 rounded text-xs font-mono text-slate-300 space-y-1">
-                  <div>SHOPIFY_API_KEY = your_client_id</div>
-                  <div>SHOPIFY_API_SECRET = your_client_secret</div>
-                  <div>SCOPES = read_orders,write_orders,read_discounts,write_discounts,write_theme_code</div>
+                <div className="bg-slate-900 p-2.5 rounded text-xs font-mono text-slate-300 space-y-1.5 border border-slate-800">
+                  <div className="flex items-center justify-between">
+                    <span className="text-emerald-400 font-bold text-[11px]">Final Complete Scopes (20 Scopes):</span>
+                    <button
+                      onClick={() => handleCopy('read_orders,write_orders,read_discounts,write_discounts,write_theme_code,read_themes,write_themes,read_checkouts,write_checkouts,read_payment_customizations,write_payment_customizations,read_products,write_products,read_price_rules,write_price_rules,read_draft_orders,write_draft_orders,read_customers,read_delivery_customizations,write_delivery_customizations', 'full-scopes-guide')}
+                      className="text-emerald-400 hover:text-emerald-300 font-semibold flex items-center gap-1 text-[11px]"
+                    >
+                      {copiedKey === 'full-scopes-guide' ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
+                      <span>{copiedKey === 'full-scopes-guide' ? 'Copied!' : 'Copy All Scopes'}</span>
+                    </button>
+                  </div>
+                  <div className="text-[11px] text-slate-300 break-all bg-slate-950 p-2 rounded max-h-20 overflow-y-auto">
+                    read_orders,write_orders,read_discounts,write_discounts,write_theme_code,read_themes,write_themes,read_checkouts,write_checkouts,read_payment_customizations,write_payment_customizations,read_products,write_products,read_price_rules,write_price_rules,read_draft_orders,write_draft_orders,read_customers,read_delivery_customizations,write_delivery_customizations
+                  </div>
+                  <div className="text-[11px] text-slate-400 pt-1 border-t border-slate-800 flex flex-col gap-1">
+                    <div>⚡ <strong>Checkout Scopes:</strong> <code className="text-amber-300">write_payment_customizations, write_checkouts</code> (UPI ke aage RECOMMENDED aur 10% off badge lagane ke liye)</div>
+                    <div>⚡ <strong>Calculation Scopes:</strong> <code className="text-emerald-300">write_price_rules, write_discounts, read_products</code> (Cart subtotal aur automatic 10% calculation ke liye)</div>
+                  </div>
                 </div>
               </div>
 

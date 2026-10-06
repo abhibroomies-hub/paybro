@@ -13,9 +13,37 @@ import {
   RefreshCw,
   Cpu,
   Store,
-  ArrowRight
+  ArrowRight,
+  Sparkles,
+  Calculator,
+  ShoppingCart,
+  Zap,
+  CheckCheck
 } from 'lucide-react';
 import { ShopifyStoreConfig } from '../types';
+
+export const FINAL_RECOMMENDED_SCOPES: string[] = [
+  'read_orders',
+  'write_orders',
+  'read_discounts',
+  'write_discounts',
+  'write_theme_code',
+  'read_themes',
+  'write_themes',
+  'read_checkouts',
+  'write_checkouts',
+  'read_payment_customizations',
+  'write_payment_customizations',
+  'read_products',
+  'write_products',
+  'read_price_rules',
+  'write_price_rules',
+  'read_draft_orders',
+  'write_draft_orders',
+  'read_customers',
+  'read_delivery_customizations',
+  'write_delivery_customizations',
+];
 
 interface ShopifyIntegrationHubProps {
   storeConfig: ShopifyStoreConfig;
@@ -61,6 +89,16 @@ export const ShopifyIntegrationHub: React.FC<ShopifyIntegrationHubProps> = ({
   };
 
   const generatedOauthUrl = `https://${shopDomain || 'your-store.myshopify.com'}/admin/oauth/authorize?client_id=${apiKey || 'your_api_key'}&scope=${storeConfig.scopes.join(',')}&redirect_uri=${appUrl}/api/auth/callback`;
+
+  const handleApplyFullScopes = () => {
+    onUpdateConfig({
+      ...storeConfig,
+      scopes: FINAL_RECOMMENDED_SCOPES,
+    });
+  };
+
+  const fullScopesString = FINAL_RECOMMENDED_SCOPES.join(',');
+  const isFullScopesApplied = FINAL_RECOMMENDED_SCOPES.every((s) => storeConfig.scopes.includes(s));
 
   return (
     <div className="space-y-6">
@@ -229,8 +267,21 @@ export const ShopifyIntegrationHub: React.FC<ShopifyIntegrationHubProps> = ({
 
           {/* Requested Scopes */}
           <div className="space-y-2 text-xs">
-            <span className="font-semibold text-slate-300">Configured Access Scopes:</span>
-            <div className="flex flex-wrap gap-1.5">
+            <div className="flex items-center justify-between">
+              <span className="font-semibold text-slate-300">
+                Active Scopes ({storeConfig.scopes.length}/20):
+              </span>
+              {!isFullScopesApplied && (
+                <button
+                  onClick={handleApplyFullScopes}
+                  className="text-[11px] text-emerald-400 hover:text-emerald-300 font-semibold flex items-center gap-1 bg-emerald-950/80 px-2 py-0.5 rounded border border-emerald-800"
+                >
+                  <Zap className="w-3 h-3 text-amber-300" />
+                  <span>Apply All 20 Scopes</span>
+                </button>
+              )}
+            </div>
+            <div className="flex flex-wrap gap-1.5 max-h-32 overflow-y-auto bg-slate-950/50 p-2 rounded border border-slate-800/80">
               {storeConfig.scopes.map((scope) => (
                 <span
                   key={scope}
@@ -251,6 +302,184 @@ export const ShopifyIntegrationHub: React.FC<ShopifyIntegrationHubProps> = ({
           </div>
         </div>
 
+      </div>
+
+      {/* FINAL COMPLETE SCOPES & PERMISSIONS ENGINE (CHECKOUT & CALCULATIONS) */}
+      <div className="bg-gradient-to-br from-slate-900 via-slate-900 to-slate-950 border border-emerald-800/80 rounded-2xl p-6 space-y-6 shadow-xl">
+        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border-b border-slate-800 pb-4">
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="w-3 h-3 rounded-full bg-emerald-400 animate-pulse" />
+              <h2 className="text-base font-bold text-white tracking-tight flex items-center gap-2">
+                <span>Final Complete Access Scopes &amp; Permissions</span>
+                <span className="text-xs bg-emerald-950 text-emerald-300 border border-emerald-700 px-2 py-0.5 rounded font-mono">
+                  Checkout + Calculation Ready
+                </span>
+              </h2>
+            </div>
+            <p className="text-xs text-slate-300 mt-1">
+              Bhai aapne poocha tha ki <code className="text-amber-300">read_orders, write_orders, read_discounts, write_discounts, write_theme_code</code> ke alawa kya add karna hai. 
+              Checkout page par 10% UPI offer aur calculation auto-run karne ke liye yeh <strong>Final List</strong> hai:
+            </p>
+          </div>
+
+          <div className="flex items-center gap-2 shrink-0">
+            <button
+              onClick={() => handleCopy(fullScopesString, 'full-scopes-comma')}
+              className="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg font-bold text-xs flex items-center gap-1.5 transition-colors shadow-sm"
+            >
+              {copiedKey === 'full-scopes-comma' ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
+              <span>{copiedKey === 'full-scopes-comma' ? 'Copied Full String!' : '1-Click Copy All Scopes'}</span>
+            </button>
+
+            {!isFullScopesApplied && (
+              <button
+                onClick={handleApplyFullScopes}
+                className="px-3.5 py-2 bg-slate-800 hover:bg-slate-700 text-emerald-400 border border-emerald-700 rounded-lg font-bold text-xs flex items-center gap-1.5 transition-colors"
+              >
+                <Zap className="w-3.5 h-3.5 text-amber-300" />
+                <span>Auto-Apply to App</span>
+              </button>
+            )}
+          </div>
+        </div>
+
+        {/* Ready to Paste Box */}
+        <div className="bg-slate-950 border border-slate-800 rounded-xl p-4 space-y-3">
+          <div className="flex items-center justify-between text-xs">
+            <span className="font-mono font-semibold text-emerald-400 flex items-center gap-1.5">
+              <CheckCheck className="w-4 h-4" />
+              <span>Full Comma-Separated String (Partners &gt; App setup &gt; Access scopes me paste karein):</span>
+            </span>
+            <span className="text-[11px] text-slate-400 font-mono">20 Total Scopes</span>
+          </div>
+
+          <div className="font-mono text-xs text-slate-200 bg-slate-900 border border-slate-800/80 p-3 rounded-lg break-all select-all leading-relaxed">
+            {fullScopesString}
+          </div>
+
+          <div className="flex flex-wrap items-center justify-between gap-2 pt-1 text-[11px]">
+            <div className="flex items-center gap-2 text-slate-400">
+              <span className="bg-slate-800 text-slate-300 px-2 py-0.5 rounded font-mono">
+                Pehle se aapke paas: 5 scopes
+              </span>
+              <span className="text-emerald-400 font-bold">+ 15 Naye Checkout &amp; Calculation Scopes added!</span>
+            </div>
+
+            <button
+              onClick={() => handleCopy(`scopes = "${fullScopesString}"`, 'toml-scopes')}
+              className="text-xs text-slate-400 hover:text-white flex items-center gap-1 font-mono"
+            >
+              {copiedKey === 'toml-scopes' ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
+              <span>{copiedKey === 'toml-scopes' ? 'Copied for TOML!' : 'Copy for shopify.app.toml'}</span>
+            </button>
+          </div>
+        </div>
+
+        {/* 4 Clear Category Breakdown Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          
+          {/* Box 1: Checkout UI & Payment Options */}
+          <div className="bg-slate-950/60 border border-emerald-900/50 rounded-xl p-4 space-y-2">
+            <div className="flex items-center gap-1.5 text-xs font-bold text-emerald-400">
+              <ShoppingCart className="w-4 h-4" />
+              <span>1. Checkout &amp; UPI Customization</span>
+            </div>
+            <p className="text-[11px] text-slate-400 leading-snug">
+              Checkout page par UPI option ke aage <strong>RECOMMENDED</strong> aur <strong>⚡ 10% OFF</strong> badge inject karne ke liye.
+            </p>
+            <div className="pt-1 space-y-1 font-mono text-[10px] text-slate-300">
+              <div className="bg-slate-900 p-1.5 rounded border border-slate-800 text-emerald-300">
+                write_payment_customizations
+              </div>
+              <div className="bg-slate-900 p-1.5 rounded border border-slate-800 text-emerald-300">
+                read_payment_customizations
+              </div>
+              <div className="bg-slate-900 p-1.5 rounded border border-slate-800">
+                write_checkouts, read_checkouts
+              </div>
+            </div>
+          </div>
+
+          {/* Box 2: Real-time Calculation & Discounts */}
+          <div className="bg-slate-950/60 border border-amber-900/50 rounded-xl p-4 space-y-2">
+            <div className="flex items-center gap-1.5 text-xs font-bold text-amber-400">
+              <Calculator className="w-4 h-4" />
+              <span>2. Discount &amp; Price Calculation</span>
+            </div>
+            <p className="text-[11px] text-slate-400 leading-snug">
+              Bina kisi manual coupon ke subtotal amount se 10% calculate karke total amount minus karne ke liye.
+            </p>
+            <div className="pt-1 space-y-1 font-mono text-[10px] text-slate-300">
+              <div className="bg-slate-900 p-1.5 rounded border border-slate-800 text-amber-300">
+                write_discounts, read_discounts
+              </div>
+              <div className="bg-slate-900 p-1.5 rounded border border-slate-800 text-amber-300">
+                write_price_rules, read_price_rules
+              </div>
+              <div className="bg-slate-900 p-1.5 rounded border border-slate-800">
+                write_products, read_products
+              </div>
+            </div>
+          </div>
+
+          {/* Box 3: Zero-Manual Theme Auto-Injection */}
+          <div className="bg-slate-950/60 border border-blue-900/50 rounded-xl p-4 space-y-2">
+            <div className="flex items-center gap-1.5 text-xs font-bold text-blue-400">
+              <Sparkles className="w-4 h-4" />
+              <span>3. Theme &amp; Cart Auto-Pilot</span>
+            </div>
+            <p className="text-[11px] text-slate-400 leading-snug">
+              Merchant ko manually koi block ya code add na karna pade; banner aur popup direct theme me auto-inject ho.
+            </p>
+            <div className="pt-1 space-y-1 font-mono text-[10px] text-slate-300">
+              <div className="bg-slate-900 p-1.5 rounded border border-slate-800 text-blue-300">
+                write_theme_code
+              </div>
+              <div className="bg-slate-900 p-1.5 rounded border border-slate-800 text-blue-300">
+                write_themes, read_themes
+              </div>
+            </div>
+          </div>
+
+          {/* Box 4: Orders, Delivery & Customers */}
+          <div className="bg-slate-950/60 border border-purple-900/50 rounded-xl p-4 space-y-2">
+            <div className="flex items-center gap-1.5 text-xs font-bold text-purple-400">
+              <Store className="w-4 h-4" />
+              <span>4. Orders, Delivery &amp; Drafts</span>
+            </div>
+            <p className="text-[11px] text-slate-400 leading-snug">
+              Order tracking, prepaid free shipping waiving aur instant draft order checkout flows ke liye.
+            </p>
+            <div className="pt-1 space-y-1 font-mono text-[10px] text-slate-300">
+              <div className="bg-slate-900 p-1.5 rounded border border-slate-800 text-purple-300">
+                write_orders, read_orders
+              </div>
+              <div className="bg-slate-900 p-1.5 rounded border border-slate-800">
+                write_delivery_customizations
+              </div>
+              <div className="bg-slate-900 p-1.5 rounded border border-slate-800">
+                write_draft_orders, read_customers
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        {/* Step-by-Step Instructions on Where to Paste */}
+        <div className="bg-slate-950 border border-slate-800 p-4 rounded-xl text-xs space-y-2">
+          <div className="font-bold text-white flex items-center gap-2">
+            <span className="w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[11px]">i</span>
+            <span>Bhai ise Shopify me kahan aur kaise update karna hai? (Exact Steps):</span>
+          </div>
+          <ol className="list-decimal list-inside space-y-1.5 text-slate-300 pl-1 text-[11px]">
+            <li><strong>partners.shopify.com</strong> par jao aur apne App par click karo (e.g. <em>Prepaid Perks</em>).</li>
+            <li>Left menu me <strong>Configuration</strong> (ya <strong>App setup</strong>) par click karo.</li>
+            <li>Neeche scroll karo aur <strong>Access scopes</strong> box me upar diya gaya poora text paste kar do.</li>
+            <li>Upar <strong>Save</strong> button daba do.</li>
+            <li>Ab Shopify Partner me <strong>"Select store"</strong> par click karke apne store <strong>broomiesbakery.myshopify.com</strong> me jao aur <strong>"Update permissions"</strong> / <strong>"Install app"</strong> accept kar do. Bas, saari permissions 100% active ho jayengi!</li>
+          </ol>
+        </div>
       </div>
 
       {/* Deployment Center: GitHub & Vercel Step-by-Step Files */}
