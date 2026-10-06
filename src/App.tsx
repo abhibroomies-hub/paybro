@@ -14,6 +14,7 @@ import { BannerCustomizer } from './components/BannerCustomizer';
 import { DeveloperCodeExport } from './components/DeveloperCodeExport';
 import { ShopifyAdminEmbeddedView } from './components/ShopifyAdminEmbeddedView';
 import { AutoPilotSync } from './components/AutoPilotSync';
+import { CustomCheckoutPage } from './components/CustomCheckoutPage';
 import { HindiGuideModal } from './components/HindiGuideModal';
 import { 
   INITIAL_RULES, 
@@ -24,7 +25,14 @@ import {
 import { PrepaidRule, ShopifyStoreConfig, BannerDesignConfig } from './types';
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState<string>('overview');
+  const [activeTab, setActiveTab] = useState<string>(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('tab') === 'custom-checkout') return 'custom-checkout';
+      if (params.get('tab') === 'autopilot') return 'autopilot';
+    }
+    return 'overview';
+  });
 
   // Load rules from localStorage if available
   const [rules, setRules] = useState<PrepaidRule[]>(() => {
@@ -208,6 +216,13 @@ export default function App() {
             onNavigateToIntegration={() => setActiveTab('integration')}
             isAppEnabled={isAppEnabled}
             onToggleAppEnabled={handleToggleAppEnabled}
+          />
+        )}
+
+        {activeTab === 'custom-checkout' && (
+          <CustomCheckoutPage
+            storeConfig={storeConfig}
+            rules={rules}
           />
         )}
 

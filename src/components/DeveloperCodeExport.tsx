@@ -292,6 +292,11 @@ export default router;
       code: `{\n  "name": "prepaid-perks-shopify-app",\n  "private": true,\n  "version": "1.0.0",\n  "type": "module",\n  "scripts": {\n    "dev": "vite",\n    "build": "vite build",\n    "preview": "vite preview"\n  },\n  "dependencies": {\n    "@tailwindcss/vite": "^4.3.3",\n    "@vitejs/plugin-react": "^6.1.1",\n    "lucide-react": "^0.546.0",\n    "react": "^19.0.1",\n    "react-dom": "^19.0.1",\n    "vite": "^8.3.0",\n    "express": "^4.21.2",\n    "dotenv": "^17.2.3",\n    "motion": "^12.23.24"\n  },\n  "devDependencies": {\n    "@types/node": "^22.14.0",\n    "@types/react": "^19.3.0",\n    "@types/react-dom": "^19.3.0",\n    "autoprefixer": "^10.4.21",\n    "tailwindcss": "^4.3.3",\n    "tsx": "^4.21.0",\n    "typescript": "^7.0.2",\n    "@types/express": "^4.17.21"\n  }\n}`,
       language: 'json',
     },
+    'fast-checkout-snippet': {
+      label: 'snippets/paybro-fast-checkout.liquid (1-Click Cart Redirect)',
+      code: `<!-- snippets/paybro-fast-checkout.liquid -->\n<!-- Paste in theme.liquid before </head> to redirect Shopify cart to PayBro Fast Checkout -->\n<script>\n  document.addEventListener("DOMContentLoaded", function() {\n    // Intercept checkout buttons on cart page and cart drawer\n    const checkoutBtns = document.querySelectorAll('button[name="checkout"], input[name="checkout"], a[href="/checkout"]');\n    checkoutBtns.forEach(btn => {\n      btn.addEventListener("click", function(e) {\n        e.preventDefault();\n        window.location.href = "${storeConfig.appUrl}/?tab=custom-checkout&shop=broomiesbakery.myshopify.com";\n      });\n    });\n  });\n</script>`,
+      language: 'html',
+    },
   };
 
   const currentFile = filesMap[activeFile] || filesMap['shopify-toml'];

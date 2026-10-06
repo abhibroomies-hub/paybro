@@ -102,6 +102,18 @@ export const Header: React.FC<HeaderProps> = ({
           </button>
 
           <button
+            onClick={() => setActiveTab('custom-checkout')}
+            className={`px-3 py-1.5 rounded-md transition-colors flex items-center gap-1.5 ${
+              activeTab === 'custom-checkout'
+                ? 'bg-emerald-600 text-white font-bold shadow-xs'
+                : 'text-amber-300 bg-amber-950/60 border border-amber-800/80 hover:bg-amber-900/60 font-semibold'
+            }`}
+          >
+            <Sparkles className="w-3.5 h-3.5 text-amber-300" />
+            <span>⚡ Custom Fast Checkout</span>
+          </button>
+
+          <button
             onClick={() => setActiveTab('simulator')}
             className={`px-3 py-1.5 rounded-md transition-colors flex items-center gap-1.5 ${
               activeTab === 'simulator'
@@ -110,7 +122,7 @@ export const Header: React.FC<HeaderProps> = ({
             }`}
           >
             <Smartphone className="w-3.5 h-3.5" />
-            <span>Checkout Simulator</span>
+            <span>Simulator</span>
           </button>
 
           <button
@@ -216,6 +228,14 @@ export const Header: React.FC<HeaderProps> = ({
           }`}
         >
           Shopify Admin
+        </button>
+        <button
+          onClick={() => setActiveTab('custom-checkout')}
+          className={`px-2.5 py-1 rounded whitespace-nowrap font-bold ${
+            activeTab === 'custom-checkout' ? 'bg-emerald-600 text-white' : 'text-amber-300 bg-amber-950 border border-amber-800'
+          }`}
+        >
+          ⚡ Custom Checkout
         </button>
         <button
           onClick={() => setActiveTab('simulator')}
