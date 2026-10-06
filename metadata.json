@@ -1,0 +1,6 @@
+{
+  "name": "Prepaid Perks - Shopify Payment Offers & Discount Engine",
+  "description": "Custom Shopify app dashboard to configure dynamic prepaid payment discounts, reduce COD RTOs, simulate checkout offers, and export production-ready Shopify Functions & Theme Extensions for Vercel/GitHub.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
