@@ -68,7 +68,7 @@ export const INITIAL_RULES: PrepaidRule[] = [
 ];
 
 export const INITIAL_STORE_CONFIG: ShopifyStoreConfig = {
-  shopDomain: 'fashion-bazaar-india.myshopify.com',
+  shopDomain: 'broomiesbakery.myshopify.com',
   apiKey: 'shp_7a9f82d1b03e491c92a',
   apiSecret: 'shpss_8c172e9a5bf3214da9e8c',
   scopes: [
@@ -81,22 +81,22 @@ export const INITIAL_STORE_CONFIG: ShopifyStoreConfig = {
   ],
   appUrl: 'https://paybro-eta.vercel.app',
   isConnected: true,
-  installedAt: '2026-10-02 11:20 AM',
+  installedAt: 'Installed on broomiesbakery',
   themeExtEnabled: true,
   checkoutExtEnabled: true,
   webhookStatus: 'active',
 };
 
 export const INITIAL_ANALYTICS: AnalyticsSummary = {
-  totalOrders: 2840,
-  prepaidOrders: 1945,
-  codOrders: 895,
-  prepaidRatio: 68.48,
-  totalDiscountsDisbursed: 142850,
-  totalRevenuePrepaid: 2489600,
-  estimatedRtoSaved: 261450, // 895 * 0.24 vs avoided RTO orders * ₹140 average RTO loss
-  rtoRateWithOffer: 3.2,
-  rtoRateWithoutOffer: 26.8,
+  totalOrders: 0,
+  prepaidOrders: 0,
+  codOrders: 0,
+  prepaidRatio: 0,
+  totalDiscountsDisbursed: 0,
+  totalRevenuePrepaid: 0,
+  estimatedRtoSaved: 0,
+  rtoRateWithOffer: 0,
+  rtoRateWithoutOffer: 0,
 };
 
 export const INITIAL_BANNER_DESIGN: BannerDesignConfig = {

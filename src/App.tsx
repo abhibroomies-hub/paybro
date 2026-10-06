@@ -24,7 +24,29 @@ import { PrepaidRule, ShopifyStoreConfig, BannerDesignConfig } from './types';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState<string>('overview');
-  const [rules, setRules] = useState<PrepaidRule[]>(INITIAL_RULES);
+
+  // Load rules from localStorage if available
+  const [rules, setRules] = useState<PrepaidRule[]>(() => {
+    try {
+      const saved = localStorage.getItem('paybro_rules');
+      if (saved) return JSON.parse(saved);
+    } catch (e) {
+      console.error(e);
+    }
+    return INITIAL_RULES;
+  });
+
+  // Master App Status ON / OFF
+  const [isAppEnabled, setIsAppEnabled] = useState<boolean>(() => {
+    try {
+      const saved = localStorage.getItem('paybro_app_enabled');
+      if (saved !== null) return saved === 'true';
+    } catch (e) {
+      console.error(e);
+    }
+    return true;
+  });
+
   const [storeConfig, setStoreConfig] = useState<ShopifyStoreConfig>(INITIAL_STORE_CONFIG);
   const [bannerDesign, setBannerDesign] = useState<BannerDesignConfig>(INITIAL_BANNER_DESIGN);
   const [analytics, setAnalytics] = useState(INITIAL_ANALYTICS);
@@ -34,16 +56,45 @@ export default function App() {
   const [isRuleBuilderOpen, setIsRuleBuilderOpen] = useState(false);
   const [ruleToEdit, setRuleToEdit] = useState<PrepaidRule | null>(null);
 
-  // Rule Handlers
+  // Master Toggle Handler
+  const handleToggleAppEnabled = () => {
+    setIsAppEnabled((prev) => {
+      const next = !prev;
+      try {
+        localStorage.setItem('paybro_app_enabled', String(next));
+      } catch (e) {
+        console.error(e);
+      }
+      return next;
+    });
+  };
+
+  // Rule Handlers with immediate persistence
   const handleToggleRule = (ruleId: string) => {
-    setRules((prev) =>
-      prev.map((r) => (r.id === ruleId ? { ...r, isActive: !r.isActive } : r))
-    );
+    setRules((prev) => {
+      const updated = prev.map((r) =>
+        r.id === ruleId ? { ...r, isActive: !r.isActive } : r
+      );
+      try {
+        localStorage.setItem('paybro_rules', JSON.stringify(updated));
+      } catch (e) {
+        console.error(e);
+      }
+      return updated;
+    });
   };
 
   const handleDeleteRule = (ruleId: string) => {
     if (confirm('Are you sure you want to delete this offer rule?')) {
-      setRules((prev) => prev.filter((r) => r.id !== ruleId));
+      setRules((prev) => {
+        const updated = prev.filter((r) => r.id !== ruleId);
+        try {
+          localStorage.setItem('paybro_rules', JSON.stringify(updated));
+        } catch (e) {
+          console.error(e);
+        }
+        return updated;
+      });
     }
   };
 
@@ -55,7 +106,15 @@ export default function App() {
       createdAt: new Date().toISOString().split('T')[0],
       priority: rule.priority + 1,
     };
-    setRules((prev) => [...prev, duplicated]);
+    setRules((prev) => {
+      const updated = [...prev, duplicated];
+      try {
+        localStorage.setItem('paybro_rules', JSON.stringify(updated));
+      } catch (e) {
+        console.error(e);
+      }
+      return updated;
+    });
   };
 
   const handleEditRule = (rule: PrepaidRule) => {
@@ -71,10 +130,15 @@ export default function App() {
   const handleSaveRule = (savedRule: PrepaidRule) => {
     setRules((prev) => {
       const exists = prev.some((r) => r.id === savedRule.id);
-      if (exists) {
-        return prev.map((r) => (r.id === savedRule.id ? savedRule : r));
+      const updated = exists
+        ? prev.map((r) => (r.id === savedRule.id ? savedRule : r))
+        : [savedRule, ...prev];
+      try {
+        localStorage.setItem('paybro_rules', JSON.stringify(updated));
+      } catch (e) {
+        console.error(e);
       }
-      return [savedRule, ...prev];
+      return updated;
     });
   };
 
@@ -103,6 +167,8 @@ export default function App() {
             onNavigateToSimulator={() => setActiveTab('simulator')}
             onNavigateToIntegration={() => setActiveTab('integration')}
             onNavigateToRules={() => setActiveTab('rules')}
+            isAppEnabled={isAppEnabled}
+            onToggleAppEnabled={handleToggleAppEnabled}
           />
         )}
 
@@ -131,6 +197,8 @@ export default function App() {
             onUpdateDesign={setBannerDesign}
             onNavigateToSimulator={() => setActiveTab('simulator')}
             onNavigateToIntegration={() => setActiveTab('integration')}
+            isAppEnabled={isAppEnabled}
+            onToggleAppEnabled={handleToggleAppEnabled}
           />
         )}
 

@@ -40,7 +40,7 @@ export const Header: React.FC<HeaderProps> = ({
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <span className="text-base font-bold tracking-tight text-white">Prepaid Perks</span>
+              <span className="text-base font-bold tracking-tight text-white">PayBro</span>
               <span className="text-xs text-emerald-400 font-mono font-medium bg-emerald-950/80 border border-emerald-800/60 px-1.5 py-0.5 rounded">
                 Shopify App
               </span>

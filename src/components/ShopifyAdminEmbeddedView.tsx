@@ -39,6 +39,8 @@ interface ShopifyAdminEmbeddedViewProps {
   onUpdateDesign: (newDesign: BannerDesignConfig) => void;
   onNavigateToSimulator: () => void;
   onNavigateToIntegration: () => void;
+  isAppEnabled: boolean;
+  onToggleAppEnabled: () => void;
 }
 
 export const ShopifyAdminEmbeddedView: React.FC<ShopifyAdminEmbeddedViewProps> = ({
@@ -54,6 +56,8 @@ export const ShopifyAdminEmbeddedView: React.FC<ShopifyAdminEmbeddedViewProps> =
   onUpdateDesign,
   onNavigateToSimulator,
   onNavigateToIntegration,
+  isAppEnabled,
+  onToggleAppEnabled,
 }) => {
   const [embeddedTab, setEmbeddedTab] = useState<'overview' | 'rules' | 'banner' | 'code'>('overview');
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
@@ -271,6 +275,8 @@ export const ShopifyAdminEmbeddedView: React.FC<ShopifyAdminEmbeddedViewProps> =
                 onNavigateToSimulator={onNavigateToSimulator}
                 onNavigateToIntegration={onNavigateToIntegration}
                 onNavigateToRules={() => setEmbeddedTab('rules')}
+                isAppEnabled={isAppEnabled}
+                onToggleAppEnabled={onToggleAppEnabled}
               />
             )}
 
