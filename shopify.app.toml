@@ -1,0 +1,34 @@
+# PayBro / Prepaid Perks - Shopify App Configuration
+# Configured for merchant broomiesbakery.in (broomiesbakery.myshopify.com)
+
+client_id = "shp_7a9f82d1b03e491c92a"
+name = "PayBro / Prepaid Perks"
+handle = "paybro-prepaid-perks"
+application_url = "https://paybro-eta.vercel.app"
+embedded = true
+
+[build]
+automatically_update_urls_on_dev = true
+dev_store_url = "broomiesbakery.myshopify.com"
+
+[access_scopes]
+scopes = "read_orders,write_orders,read_discounts,write_discounts,write_theme_code,read_themes,write_themes,read_checkouts,write_checkouts,read_payment_customizations,write_payment_customizations,read_products,write_products,read_price_rules,write_price_rules,read_draft_orders,write_draft_orders,read_customers,read_delivery_customizations,write_delivery_customizations"
+
+[auth]
+redirect_urls = [
+  "https://paybro-eta.vercel.app/api/auth/callback"
+]
+
+[webhooks]
+api_version = "2024-01"
+
+  [[webhooks.subscriptions]]
+  topics = [ "orders/create" ]
+  uri = "https://paybro-eta.vercel.app/api/webhooks/orders-create"
+
+  [[webhooks.subscriptions]]
+  topics = [ "app/uninstalled" ]
+  uri = "https://paybro-eta.vercel.app/api/webhooks/app-uninstalled"
+
+[pos]
+embedded = false

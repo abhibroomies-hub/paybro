@@ -10,7 +10,8 @@ import {
   Layers,
   Code2,
   Palette,
-  Zap
+  Zap,
+  CreditCard
 } from 'lucide-react';
 import { ShopifyStoreConfig } from '../types';
 
@@ -135,6 +136,18 @@ export const Header: React.FC<HeaderProps> = ({
           >
             <Layers className="w-3.5 h-3.5" />
             <span>Shopify &amp; Vercel Setup</span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab('payment-settings')}
+            className={`px-3 py-1.5 rounded-md transition-colors flex items-center gap-1.5 ${
+              activeTab === 'payment-settings'
+                ? 'bg-emerald-600 text-white font-semibold'
+                : 'hover:text-white hover:bg-slate-900'
+            }`}
+          >
+            <CreditCard className="w-3.5 h-3.5 text-amber-300" />
+            <span>Payment Gateway</span>
           </button>
 
           <button

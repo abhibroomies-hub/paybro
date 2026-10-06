@@ -72,3 +72,26 @@ export interface CartProduct {
   image: string;
   category: string;
 }
+
+export type PaymentProviderType = 'mock' | 'razorpay' | 'phonepe' | 'cashfree';
+
+export interface PaymentMethodItem {
+  id: string;
+  label: string;
+  recommended: boolean;
+  discountPercent: number;
+  icon: string;
+  penalty?: number;
+}
+
+export interface AppSettingsMetafield {
+  discountPercent: number;
+  minCart: number;
+  maxCap: number;
+  codPenalty: number;
+  paymentProvider: PaymentProviderType;
+  razorpayConfigured: boolean;
+  razorpayKeyId?: string;
+  automaticDiscountId?: string;
+  updatedAt?: string;
+}

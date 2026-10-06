@@ -15,6 +15,7 @@ import { DeveloperCodeExport } from './components/DeveloperCodeExport';
 import { ShopifyAdminEmbeddedView } from './components/ShopifyAdminEmbeddedView';
 import { AutoPilotSync } from './components/AutoPilotSync';
 import { CustomCheckoutPage } from './components/CustomCheckoutPage';
+import { PaymentSettings } from './components/PaymentSettings';
 import { HindiGuideModal } from './components/HindiGuideModal';
 import { 
   INITIAL_RULES, 
@@ -22,7 +23,7 @@ import {
   INITIAL_ANALYTICS, 
   INITIAL_BANNER_DESIGN 
 } from './data/mockData';
-import { PrepaidRule, ShopifyStoreConfig, BannerDesignConfig } from './types';
+import { PrepaidRule, ShopifyStoreConfig, BannerDesignConfig, AppSettingsMetafield } from './types';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState<string>(() => {
@@ -59,6 +60,33 @@ export default function App() {
   const [storeConfig, setStoreConfig] = useState<ShopifyStoreConfig>(INITIAL_STORE_CONFIG);
   const [bannerDesign, setBannerDesign] = useState<BannerDesignConfig>(INITIAL_BANNER_DESIGN);
   const [analytics, setAnalytics] = useState(INITIAL_ANALYTICS);
+
+  // App Settings (stored in shop.metafields.paybro.settings, no DB required)
+  const [appSettings, setAppSettings] = useState<AppSettingsMetafield>(() => {
+    try {
+      const saved = localStorage.getItem('paybro_metafield_settings');
+      if (saved) return JSON.parse(saved);
+    } catch (e) {
+      console.error(e);
+    }
+    return {
+      discountPercent: 10,
+      minCart: 499,
+      maxCap: 500,
+      codPenalty: 50,
+      paymentProvider: 'mock',
+      razorpayConfigured: false,
+    };
+  });
+
+  const handleUpdateAppSettings = (newSettings: AppSettingsMetafield) => {
+    setAppSettings(newSettings);
+    try {
+      localStorage.setItem('paybro_metafield_settings', JSON.stringify(newSettings));
+    } catch (e) {
+      console.error(e);
+    }
+  };
 
   // Modal states
   const [isHindiGuideOpen, setIsHindiGuideOpen] = useState(false);
@@ -164,7 +192,25 @@ export default function App() {
       />
 
       {/* Main Content Area */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
+        
+        {/* Test Mode Banner */}
+        {appSettings.paymentProvider === 'mock' && (
+          <div className="bg-gradient-to-r from-emerald-950/80 via-slate-900 to-slate-950 border border-emerald-800/80 px-4 py-2.5 rounded-xl flex items-center justify-between text-xs text-slate-300">
+            <div className="flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
+              <span>
+                <strong className="text-white">🧪 Test Mode:</strong> Using <strong>Mock Payment Provider</strong> (No API keys needed &bull; Zero external database).
+              </span>
+            </div>
+            <button
+              onClick={() => setActiveTab('payment-settings')}
+              className="text-emerald-400 hover:text-emerald-300 font-semibold underline underline-offset-2 ml-2"
+            >
+              Configure Razorpay →
+            </button>
+          </div>
+        )}
         
         {activeTab === 'autopilot' && (
           <AutoPilotSync
@@ -223,6 +269,14 @@ export default function App() {
           <CustomCheckoutPage
             storeConfig={storeConfig}
             rules={rules}
+            appSettings={appSettings}
+          />
+        )}
+
+        {activeTab === 'payment-settings' && (
+          <PaymentSettings
+            settings={appSettings}
+            onUpdateSettings={handleUpdateAppSettings}
           />
         )}
 

@@ -1,0 +1,42 @@
+{% comment %}
+  PayBro / Prepaid Perks - Theme App Extension
+  App Embed Block for Broomies Bakery (Auto-injected into <head> or <body>)
+  Zero manual theme file editing required!
+{% endcomment %}
+
+<script src="{{ 'prepaid-offer.js' | asset_url }}" defer="defer"></script>
+
+<div id="paybro-config" 
+  data-app-url="https://paybro-eta.vercel.app"
+  data-discount-percent="10"
+  data-min-order="499"
+  data-shop-domain="{{ shop.permanent_domain }}"
+  style="display: none;">
+</div>
+
+{% schema %}
+{
+  "name": "PayBro Prepaid Offer Embed",
+  "target": "body",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Offer Title",
+      "default": "⚡ Extra 10% OFF on UPI & Online Pay"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_fast_checkout",
+      "label": "Enable Fast 1-Page Checkout Intercept",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_product_badge",
+      "label": "Show Badge on Product Pages",
+      "default": true
+    }
+  ]
+}
+{% endschema %}

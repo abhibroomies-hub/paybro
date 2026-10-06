@@ -285,6 +285,94 @@ export const AutoPilotSync: React.FC<AutoPilotSyncProps> = ({
         </div>
       </div>
 
+      {/* Screenshot Troubleshooting & Instant Fix Guide */}
+      <div className="bg-gradient-to-br from-amber-950/40 via-slate-900 to-slate-950 border border-amber-600/60 rounded-2xl p-6 space-y-5">
+        <div className="flex items-center gap-2.5 border-b border-slate-800 pb-3">
+          <AlertCircle className="w-5 h-5 text-amber-400 shrink-0" />
+          <div>
+            <h3 className="text-sm font-bold text-white flex items-center gap-2">
+              <span>Aapke Screenshot me Checkout par Abhi kyu nahi dikha? (Exact Reason &amp; 2-Minute Fix)</span>
+              <span className="text-[10px] bg-amber-950 text-amber-300 border border-amber-700 px-2 py-0.5 rounded font-mono">
+                Storefront Fix
+              </span>
+            </h3>
+            <p className="text-xs text-slate-300 mt-0.5">
+              Bhai aapne permissions toh saari de di hain, lekin Shopify ke native checkout page (<code>broomiesbakery.in/checkouts/...</code>) par 10% discount aur RECOMMENDED text aane ke liye ye 2 steps complete hone zaroori hain:
+            </p>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          
+          {/* Fix 1: Shopify Automatic Discount */}
+          <div className="bg-slate-950 border border-slate-800 rounded-xl p-4 space-y-2.5">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-bold text-emerald-400 flex items-center gap-1.5">
+                <CheckCircle2 className="w-4 h-4" />
+                <span>Fix 1: Right Side me 10% (₹150) Minus Karna</span>
+              </span>
+              <span className="text-[10px] font-mono bg-emerald-950 text-emerald-300 px-2 py-0.5 rounded border border-emerald-800">
+                1 Minute Step
+              </span>
+            </div>
+            <p className="text-xs text-slate-300 leading-relaxed">
+              Shopify checkout ke right side summary me (Total: ₹1,500) se ₹150 minus tabhi hoga jab Shopify Admin me <strong>Automatic Discount</strong> ON ho:
+            </p>
+            <ol className="list-decimal list-inside text-xs text-slate-400 space-y-1 bg-slate-900 p-3 rounded-lg border border-slate-800">
+              <li>Shopify Admin (<code className="text-emerald-400">admin.shopify.com</code>) par jao.</li>
+              <li>Left menu me <strong>Discounts</strong> &gt; <strong>Create discount</strong> par click karo.</li>
+              <li>Select karo <strong>Amount off order</strong> &gt; Choose <strong>Automatic discount</strong>.</li>
+              <li>Title me dalo: <strong className="text-white">10% Instant Online Offer</strong>.</li>
+              <li>Percentage me dalo: <strong className="text-emerald-400">10%</strong>.</li>
+              <li><strong>Save discount</strong> daba do! Bas, checkout page reload karte hi ₹1,500 ka ₹1,350 ho jayega!</li>
+            </ol>
+          </div>
+
+          {/* Fix 2: Razorpay Gateway Label */}
+          <div className="bg-slate-950 border border-slate-800 rounded-xl p-4 space-y-2.5">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-bold text-amber-400 flex items-center gap-1.5">
+                <Sparkles className="w-4 h-4" />
+                <span>Fix 2: Razorpay ke aage [RECOMMENDED] Likhna</span>
+              </span>
+              <span className="text-[10px] font-mono bg-amber-950 text-amber-300 px-2 py-0.5 rounded border border-amber-800">
+                30 Seconds Step
+              </span>
+            </div>
+            <p className="text-xs text-slate-300 leading-relaxed">
+              Aapke screenshot me likha hai: <code>Razorpay Secure (UPI, Card...)</code>. Is label ko badalne ke liye:
+            </p>
+            <ol className="list-decimal list-inside text-xs text-slate-400 space-y-1 bg-slate-900 p-3 rounded-lg border border-slate-800">
+              <li>Shopify Admin &gt; <strong>Online Store</strong> &gt; <strong>Themes</strong> par jao.</li>
+              <li>Active theme ke aage <strong>&bull;&bull;&bull; (Three dots)</strong> &gt; <strong>Edit default theme content</strong> click karo.</li>
+              <li>Search box me search karo: <code className="text-amber-300">Razorpay</code> ya <code className="text-amber-300">Payment</code>.</li>
+              <li>Label ko change karke likh do: <strong className="text-white">⚡ Razorpay Secure (UPI 10% OFF - RECOMMENDED)</strong>.</li>
+              <li>Top right me <strong>Save</strong> kar do! Checkout me exact RECOMMENDED aur 10% OFF dikhega!</li>
+            </ol>
+          </div>
+
+        </div>
+
+        {/* Alternative: Magic Checkout Style Fast Checkout */}
+        <div className="bg-slate-950/80 border border-emerald-900/60 p-4 rounded-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs">
+          <div>
+            <div className="font-bold text-white flex items-center gap-1.5">
+              <Zap className="w-4 h-4 text-emerald-400" />
+              <span>Dusra Tarika: "Magic Checkout" jaisa Fast 1-Page Checkout Use Karein</span>
+            </div>
+            <p className="text-slate-400 text-[11px] mt-0.5">
+              Magic Checkout kya karta tha? Wo Shopify ke is rigid checkout ko bypass karke direct 1-page checkout open karta tha jisme UPI top par aur 10% discount pehle se laga hota tha.
+            </p>
+          </div>
+          <a
+            href="?tab=custom-checkout"
+            className="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg font-bold whitespace-nowrap text-xs transition-colors shrink-0"
+          >
+            ⚡ Open Fast Checkout View
+          </a>
+        </div>
+      </div>
+
     </div>
   );
 };

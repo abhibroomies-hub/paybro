@@ -1,0 +1,82 @@
+{
+  "info": {
+    "name": "PayBro / Prepaid Perks API Collection",
+    "description": "Production test collection for PayBro Shopify App, Payment Provider Layer, and Metafield endpoints.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1. Get Payment Methods",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{APP_URL}}/api/payment-methods",
+          "host": ["{{APP_URL}}"],
+          "path": ["api", "payment-methods"]
+        }
+      }
+    },
+    {
+      "name": "2. Create Checkout Session",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"cart\": {\n    \"total_price\": 150000,\n    \"item_count\": 1,\n    \"items\": [{\n      \"title\": \"Love in Layers\",\n      \"price\": 1500,\n      \"quantity\": 1\n    }]\n  },\n  \"shop\": \"broomiesbakery.myshopify.com\",\n  \"appliedDiscountPct\": 10\n}"
+        },
+        "url": {
+          "raw": "{{APP_URL}}/api/create-checkout-session",
+          "host": ["{{APP_URL}}"],
+          "path": ["api", "create-checkout-session"]
+        }
+      }
+    },
+    {
+      "name": "3. Create Payment Order (Provider Factory)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"amount\": 1350,\n  \"currency\": \"INR\",\n  \"provider\": \"mock\"\n}"
+        },
+        "url": {
+          "raw": "{{APP_URL}}/api/payments/create-order",
+          "host": ["{{APP_URL}}"],
+          "path": ["api", "payments", "create-order"]
+        }
+      }
+    },
+    {
+      "name": "4. Verify Payment & Create Draft Order",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"providerOrderId\": \"mock_order_123\",\n  \"providerPaymentId\": \"mock_pay_123\",\n  \"shop\": \"broomiesbakery.myshopify.com\",\n  \"items\": [{\n    \"title\": \"Love in Layers\",\n    \"price\": 1500,\n    \"quantity\": 1\n  }],\n  \"discountAmount\": 150\n}"
+        },
+        "url": {
+          "raw": "{{APP_URL}}/api/payments/verify",
+          "host": ["{{APP_URL}}"],
+          "path": ["api", "payments", "verify"]
+        }
+      }
+    },
+    {
+      "name": "5. Get / Set Shop Settings (Metafields)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{APP_URL}}/api/settings?shop=broomiesbakery.myshopify.com",
+          "host": ["{{APP_URL}}"],
+          "path": ["api", "settings"],
+          "query": [{ "key": "shop", "value": "broomiesbakery.myshopify.com" }]
+        }
+      }
+    }
+  ]
+}

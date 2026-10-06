@@ -17,16 +17,19 @@ import {
   Zap,
   Store
 } from 'lucide-react';
-import { PrepaidRule, ShopifyStoreConfig } from '../types';
+import { PrepaidRule, ShopifyStoreConfig, AppSettingsMetafield } from '../types';
+import { PaymentProviderFactory } from '../payments/PaymentProviderFactory';
 
 interface CustomCheckoutPageProps {
   storeConfig: ShopifyStoreConfig;
   rules: PrepaidRule[];
+  appSettings?: AppSettingsMetafield;
 }
 
 export const CustomCheckoutPage: React.FC<CustomCheckoutPageProps> = ({
   storeConfig,
   rules,
+  appSettings,
 }) => {
   // Customer details
   const [firstName, setFirstName] = useState('Abhishek');
@@ -42,13 +45,13 @@ export const CustomCheckoutPage: React.FC<CustomCheckoutPageProps> = ({
   const [selectedPayment, setSelectedPayment] = useState<'upi' | 'cod'>('upi');
   const [razorpayKey, setRazorpayKey] = useState('rzp_test_1DP5mmOlF5G5ag'); // default test key or merchant key
 
-  // Order Item (Broomies Bakery Real Item)
+  // Order Item (Broomies Bakery Real Item from Live Store)
   const [item, setItem] = useState({
-    title: 'Love Heart Cake',
-    variant: '0.75 / Chocolate',
-    price: 1350,
+    title: 'Love in Layers',
+    variant: '1 kg / Almond / Vegetarian',
+    price: 1500,
     quantity: 1,
-    image: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120" fill="%23e11d48"><rect width="120" height="120" fill="%23fce7f3"/><path d="M60 90 C30 65 15 45 25 30 C35 15 50 25 60 40 C70 25 85 15 95 30 C105 45 90 65 60 90 Z" fill="%23e11d48"/><text x="60" y="55" fill="%23ffffff" font-size="10" font-family="sans-serif" text-anchor="middle" font-weight="bold">BROOMIES</text></svg>',
+    image: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120" fill="%23e11d48"><rect width="120" height="120" fill="%23fce7f3"/><circle cx="60" cy="60" r="45" fill="%23fda4af"/><text x="60" y="65" fill="%23881337" font-size="11" font-family="sans-serif" text-anchor="middle" font-weight="bold">BROOMIES</text></svg>',
   });
 
   const [orderPlaced, setOrderPlaced] = useState(false);
@@ -75,6 +78,7 @@ export const CustomCheckoutPage: React.FC<CustomCheckoutPageProps> = ({
 
   const handlePayNow = () => {
     setIsProcessing(true);
+    const activeProvider = appSettings?.paymentProvider || 'mock';
 
     if (selectedPayment === 'cod') {
       // Direct Cash on Delivery Order placement
@@ -85,10 +89,24 @@ export const CustomCheckoutPage: React.FC<CustomCheckoutPageProps> = ({
       return;
     }
 
-    // Razorpay Integration
+    if (activeProvider === 'mock') {
+      // MOCK PROVIDER PIPELINE (ZERO CONFIGURATION REQUIRED)
+      console.log('[MOCK CHECKOUT] Triggering MockPaymentProvider createOrder & verifyPayment');
+      const provider = PaymentProviderFactory.getProvider('mock');
+
+      provider.createOrder({ amount: finalTotal, currency: 'INR' }).then((orderRes) => {
+        provider.verifyPayment({ providerOrderId: orderRes.providerOrderId, providerPaymentId: 'mock_pay_' + Date.now() }).then(() => {
+          setIsProcessing(false);
+          setOrderPlaced(true);
+        });
+      });
+      return;
+    }
+
+    // RAZORPAY LIVE INTEGRATION
     if (typeof (window as any).Razorpay !== 'undefined') {
       const options = {
-        key: razorpayKey,
+        key: appSettings?.razorpayKeyId || razorpayKey,
         amount: finalTotal * 100, // in paise
         currency: 'INR',
         name: 'Broomies Bakery',
@@ -121,7 +139,6 @@ export const CustomCheckoutPage: React.FC<CustomCheckoutPageProps> = ({
         const rzp = new (window as any).Razorpay(options);
         rzp.open();
       } catch (err) {
-        // Fallback simulated success
         setIsProcessing(false);
         setOrderPlaced(true);
       }
@@ -344,10 +361,10 @@ export const CustomCheckoutPage: React.FC<CustomCheckoutPageProps> = ({
                     </div>
                   </div>
 
-                  {/* SAVE ₹135 BADGE ON THE RIGHT */}
+                  {/* SAVE BADGE ON THE RIGHT */}
                   <div className="flex items-center gap-1 shrink-0">
                     <span className="text-xs font-mono font-bold text-emerald-700 bg-emerald-100 border border-emerald-300 px-2 py-0.5 rounded">
-                      SAVE ₹135
+                      SAVE ₹{discountAmount}
                     </span>
                   </div>
                 </div>
@@ -362,14 +379,14 @@ export const CustomCheckoutPage: React.FC<CustomCheckoutPageProps> = ({
                           Extra 10% OFF on UPI &amp; Online Pay
                         </div>
                         <div className="text-[11px] text-emerald-100">
-                          Pay Online &amp; Save ₹135 instantly! No coupon code required.
+                          Pay Online &amp; Save ₹{discountAmount} instantly! No coupon code required.
                         </div>
                       </div>
                     </div>
 
                     <div className="text-right shrink-0">
                       <div className="font-mono font-bold text-amber-300 text-sm">
-                        -₹135
+                        -₹{discountAmount}
                       </div>
                       <div className="text-[10px] text-emerald-200">
                         Auto-Applied
